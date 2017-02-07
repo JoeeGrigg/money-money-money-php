@@ -1,9 +1,8 @@
 <?php
 
-namespace spec\VictoriaPlum\MoneyMoneyMoney;
+namespace VictoriaPlum\MoneyMoneyMoney;
 
 require __DIR__ . '/vendor/autoload.php';
-require './src/MoneyMoneyMoney/spec/MoneyImmutableSpec.php';
 
 $products = [
   [
@@ -38,8 +37,8 @@ $products = [
   ]
 ];
 
-$productsParser = new moneyImmutableSpec();
-$parsedProducts = $productsParser->parse($products);
+$productsParser = new BulkMoneyParser($products);
+$parsedProducts = $productsParser->process();
 
 print_r($parsedProducts);
 

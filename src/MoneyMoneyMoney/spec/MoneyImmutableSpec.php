@@ -8,44 +8,31 @@ use Prophecy\Argument;
 class MoneyImmutableSpec extends ObjectBehavior
 {
 
-  private function pounds_without_tax($product) {
-    return $product['price_without_tax'] + $product['price_addition_without_tax'];
+  function let() {
+    $this->beConstructedWith(
+      [
+        'item_code' => 'TAP135',
+        'price_without_tax' => 12.87,
+        'price_addition_without_tax' => 3.67,
+        'tax_rate_adjustment' => 0.34
+      ]
+    );
   }
 
-  private function pounds_with_tax($product) {
-    return round($this->pounds_without_tax($product) * (1.0 + $product['tax_rate_adjustment']), 2);
+  function it_has_a_price_in_pounds_without_tax() {
+    $this->pounds_without_tax()->shouldReturn(16.54);
   }
 
-  private function pence_without_tax($product) {
-    return round($this->pounds_without_tax($product) * 100);
+  function it_has_a_price_in_pounds_with_tax() {
+    $this->pounds_with_tax()->shouldReturn(22.16);
   }
 
-  private function pence_with_tax($product) {
-    return round($this->pounds_with_tax($product) * 100);
+  function it_has_a_price_in_pence_without_tax() {
+    $this->pence_without_tax()->shouldReturn(1654);
   }
 
-  public function parse($products) {
-
-    // Define return item
-    $transformedProducts = [];
-
-    // Loop over products
-    foreach($products as $product) {
-
-      $transformedProduct = [
-        'item_code' => $product['item_code'],
-        'pence_with_tax' => $this->pence_with_tax($product),
-        'pence_without_tax' => $this->pence_without_tax($product),
-        'pounds_with_tax' => $this->pounds_with_tax($product),
-        'pounds_without_tax' => $this->pounds_without_tax($product)
-      ];
-
-      array_push($transformedProducts, $transformedProduct);
-
-    }
-
-    return $transformedProducts;
-
+  function it_has_a_price_in_pence_with_tax() {
+    $this->pence_with_tax()->shouldReturn(2216);
   }
 
 }
